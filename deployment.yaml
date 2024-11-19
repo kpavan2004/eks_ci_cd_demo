@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: myapp-pod
+  template:
+    metadata:
+      labels:
+        app: myapp-pod
+    spec:
+      containers:
+      - name: mycontainer
+        image: kpavan2004/titanic-api-demo     # Change it as per your docker image
+        ports:
+        - containerPort: 8001
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-svc-v2
+spec:
+  type: NodePort
+  selector:
+    app: myapp-pod
+  ports:
+  - port: 5000         # Service IP Port
+    targetPort: 8001   # Container Port
+    nodePort: 30002    # Node Port/Host Port
+    protocol: TCP
